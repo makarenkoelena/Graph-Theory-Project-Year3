@@ -56,7 +56,7 @@ def compile (pofix):
     nfastack = []
 
     for c in pofix:
-        if c == '.':
+        if c == '.': #followed by
             # pop 2 NFA's off the stack
             nfa2 = nfastack.pop()
             nfa1 = nfastack.pop()
@@ -64,7 +64,7 @@ def compile (pofix):
             nfa1.accept.edge1 = nfa2.initial 
             # push NFA to the stack
             nfastack.append(nfa(nfa1.initial, nfa2.accept))
-        elif c == '|':
+        elif c == '|': #or
             # pop 2 nfas off the stack
             nfa2 = nfastack.pop()
             nfa1 = nfastack.pop()
@@ -81,49 +81,50 @@ def compile (pofix):
             # push new nfa to the stack
             nfastack.append(nfa(initial, accept))
         # at least one or more
-        elif c == '+':
+        elif c == '+': # 1 or more
             # pop a single NFA from the stack
             nfa1 = nfastack.pop()
             # create new initial and accept states
             initial = state()
             accept = state()
-            #join the new initial state to the NFA's initial state and the new accept state
+            #join the new initial state to the NFA's initial state 
             initial.edge1 = nfa1.initial
-            initial.edge2 = accept# join the old accept state to the new accept state and nfa1's initial state
+            #join the old accept state to nfa1's initial state
             nfa1.accept.edge1 = nfa1.initial
+            #join the old accept state to the new accept state
             nfa1.accept.edge2 = accept
             #push new NFA to the stack
-            nfastack.append(nfa(nfa1.initial, accept))
+            nfastack.append(nfa(initial, accept))
         # zero or more
-        elif c == '*':
+        elif c == '*': # 0 or more
             # pop a single NFA from the stack
             nfa1 = nfastack.pop()
             # create new initial and accept states
             initial = state()
             accept = state()
-            #join the new initial state to the NFA's initial state
-            # and the new accept state
+            # join the new initial state to the NFA's initial state
             initial.edge1 = nfa1.initial
+            # join the new initial state to the new accept state
             initial.edge2 = accept
-            # join the old accept state to the new accept state and nfa1's initial state
-            nfa1.accept.edge1 = nfa1.initial
             #old accept state to old initial state 
+            nfa1.accept.edge1 = nfa1.initial
+            # join the old accept state to the new accept state 
             nfa1.accept.edge2 = accept
             #push new NFA to the stack
             nfastack.append(nfa(initial, accept))
         # zero or one
-        elif c == '?':
+        elif c == '?': # 0 or 1
              # pop a single NFA from the stack
             nfa1 = nfastack.pop()
             # create new initial and accept states
             initial = state()
             accept = state()
-            #join the new initial state to the NFA's initial state
-            # and the new accept state
+            #join the new initial state to the NFA's old initial state
             initial.edge1 = nfa1.initial
+            #join the new initial state to the new accept state
             initial.edge2 = accept
-            # join the old accept state to the new accept state and nfa1's initial state
-            nfa1.accept.edge1 = nfa1.initial
+            # join the old accept state to the new accept state 
+            nfa1.accept.edge2 = accept
             #push new NFA to the stack
             nfastack.append(nfa(initial, accept))
         else:
@@ -182,8 +183,13 @@ def match(infix, string):
 
 #print(shunt("(a.b)|(c*.d)"))
 
-infixes=["a.b.c", "a.(b|d).c*", "a.(b|d).c+", "(a.(b|d))", "a.(b|b)*.c", "a.b?"]
-strings=["", "ad", "abc", "abbc", "abcc", "abad", "abbbc", "ab", "abb"]
+#infixes=["a.b.c", "a.(b|d).c*",  "(a.(b|d))", "a.(b|b)*.c", "a.b?"]
+#strings=["", "ad", "abc", "abbc", "abcc", "abad", "abbbc", "ab", "abb"]
+infixes=["a.b?"]
+strings=["", "ab", "abc", "abb", "abbb", "abbbb", "aa", "abb", "a"]
+
+# infixes=["a.(b|d).c?"]
+# strings=["", "abc", "aaa", "abccc", "abc", "adccccccc", "aa", "ad", "ab"]
 
 for i in infixes:
     for s in strings:
