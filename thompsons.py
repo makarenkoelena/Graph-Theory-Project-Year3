@@ -132,9 +132,7 @@ def compile (pofix):
             initial = state()#second circle
             initial.label = c # join 2 circles with a c character: a, b, c, etc 
             initial.edge1 = accept #points to the accept state
-            newnfa = nfa(initial, accept)
-            nfastack.append(newnfa)
-            #nfastack = append(nfa(initial, accept))
+            nfastack.append(nfa(initial, accept))
             
 # nfastack should only have a single nfa on it at a time
     return nfastack.pop()
