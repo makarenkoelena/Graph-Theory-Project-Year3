@@ -1,6 +1,6 @@
-#g00341964 
-#Elena Makarenko
+#g00341964 Elena Makarenko
 """Shunting Yard Algorithm for converting infix regular expressions to postfix"""
+import sys
 
 def shunt(infix):
 
@@ -183,12 +183,31 @@ def match(infix, string):
 
 #infixes=["a.b.c", "a.(b|d).c*",  "(a.(b|d))", "a.(b|b)*.c", "a.b?"]
 #strings=["", "ad", "abc", "abbc", "abcc", "abad", "abbbc", "ab", "abb"]
-infixes=["a.b?"]
-strings=["", "ab", "abc", "abb", "abbb", "abbbb", "aa", "abb", "a"]
+#for i in infixes:
+	#for s in strings:
+		#print (match(i, s), i, s)
 
-# infixes=["a.(b|d).c?"]
-# strings=["", "abc", "aaa", "abccc", "abc", "adccccccc", "aa", "ad", "ab"]
+# Open a file
+myFile = open("strings.txt", "r+")
+strings = myFile.readlines();
+strings = [line.rstrip('\n') for line in open('strings.txt')]#stripping the newline character:
+# Close opened files
+myFile.close()
 
-for i in infixes:
-    for s in strings:
-        print (match(i, s), i, s)
+if(len(sys.argv) == 1):
+	print ("Please enter the infix")
+	infix = input()
+	print ("Please enter the string to compare")
+	string = input()
+	print (match(infix, string), infix, string)
+elif(len(sys.argv) == 2):
+	print ("Please enter the regex to compare the file")
+	regex = input()
+	for i in strings:
+		print (match(regex, i), regex, i)
+elif(len(sys.argv) == 3):
+	print (match(sys.argv[1], sys.argv[2]), sys.argv[1], sys.argv[2])
+else:
+	print ("Number of arguments should be either 1, 2 or 3")
+	
+	
