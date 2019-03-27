@@ -1,3 +1,3 @@
 # Graph-Theory-Project-Year3
 
-![DFA](img/NFA.binary.png?raw=true "hoverover")
+![DFA](img/NFA.binary.png?raw=true "hoverover" | width=100)
