@@ -189,7 +189,7 @@ def match(infix, string):
 
 # Open a file
 myFile = open("strings.txt", "r+")
-strings = myFile.readlines();
+strings = myFile.readlines()
 strings = [line.rstrip('\n') for line in open('strings.txt')]#stripping the newline character:
 # Close opened files
 myFile.close()
