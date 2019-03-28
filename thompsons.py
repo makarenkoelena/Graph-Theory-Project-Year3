@@ -1,6 +1,7 @@
 #g00341964 Elena Makarenko
 """Shunting Yard Algorithm for converting infix regular expressions to postfix"""
 import sys
+import os.path
 
 def shunt(infix):
 
@@ -187,24 +188,31 @@ def match(infix, string):
 	#for s in strings:
 		#print (match(i, s), i, s)
 
-# Open a file
-myFile = open("strings.txt", "r+")
-strings = myFile.readlines()
-strings = [line.rstrip('\n') for line in open('strings.txt')]#stripping the newline character:
-# Close opened files
-myFile.close()
 
 if(len(sys.argv) == 1):
-	print ("Please enter the infix")
+	print ("Please enter the regex")
 	infix = input()
 	print ("Please enter the string to compare")
 	string = input()
 	print (match(infix, string), infix, string)
 elif(len(sys.argv) == 2):
-	print ("Please enter the regex to compare the file")
-	regex = input()
-	for i in strings:
-		print (match(regex, i), regex, i)
+    # Open a file
+    #print(sys.argv[1])
+    fileName = sys.argv[1]
+    if not os.path.exists(fileName):
+        print("file doesnt exist")
+    else:
+        myFile = open(fileName, "r+")
+        strings = myFile.readlines()
+        strings = [line.rstrip('\n') for line in open('strings.txt')]#stripping the newline character:
+
+        print ("Please enter the regex to compare the file")
+        regex = input()
+        for i in strings:
+            print (match(regex, i), regex, i)
+        # Close opened files
+        myFile.close()
+
 elif(len(sys.argv) == 3):
 	print (match(sys.argv[1], sys.argv[2]), sys.argv[1], sys.argv[2])
 else:
