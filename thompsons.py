@@ -5,7 +5,7 @@ import os.path
 
 def shunt(infix):
 
-    specials = {'?' : 50, '+' : 50,'*' : 50, '.' : 40, '|' : 30}
+    specials = {'?' : 50, '+' : 50,'*' : 50, '.' : 40, '|' : 30}#precedence of special characters 50- highest, 30 - lowest
 
     pofix= ""
     stack= ""
@@ -22,11 +22,11 @@ def shunt(infix):
             stack = stack[:-1]#delete ) from the stack
         elif c in specials:
             #is there any operator of higher precedence?
-            #if not put the next operator at the stack otherwise put into pofix
+            #if not put the next operator on the stack otherwise put into pofix
             #delete it from the stack
 
             # while stack same as while stack !="", while there is anything on the stack
-            #check if there is in the dictionary give it its value otherwise give 0
+            #check if there is such a character in the dictionary, if yes, return it its value otherwise return 0
             while stack and specials.get(c, 0) <= specials.get(stack[-1], 0):
                 pofix, stack = pofix+stack[-1], stack[:-1]
             stack = stack + c
@@ -40,7 +40,7 @@ def shunt(infix):
 
 #Thompson's construction
 
-# represents a state with 2 arrows, labelled by label.
+# represents a state with 2 arrows, labelled by a label.
 # use None for a label representing "e" arrows 
 class state:
     label, edge1, edge2 = None, None, None
@@ -49,7 +49,7 @@ class state:
 class nfa:
     initial, accept  = None, None
     
-    def __init__(self, initial, accept):
+    def __init__(self, initial, accept):#constructor
         self.initial = initial
         self.accept = accept
 
@@ -182,12 +182,12 @@ def match(infix, string):
 
 #print(shunt("(a.b)|(c*.d)"))
 
-#infixes=["a.b.c", "a.(b|d).c*",  "(a.(b|d))", "a.(b|b)*.c", "a.b?"]
-#strings=["", "ad", "abc", "abbc", "abcc", "abad", "abbbc", "ab", "abb"]
-#for i in infixes:
-	#for s in strings:
-		#print (match(i, s), i, s)
-
+#tests
+# infixes=["a.b.c", "a.(b|d).c*",  "(a.(b|d))", "a.(b|b)*.c", "a.b?"]
+# strings=["", "ad", "abc", "abbc", "abcc", "abad", "abbbc", "ab", "abb"]
+# for i in infixes:
+# 	for s in strings:
+# 		print (match(i, s), i, s)
 
 if(len(sys.argv) == 1):
 	print ("Please enter the regex")
@@ -200,17 +200,17 @@ elif(len(sys.argv) == 2):
     #print(sys.argv[1])
     fileName = sys.argv[1]
     if not os.path.exists(fileName):
-        print("file doesnt exist")
+        print("File not found")
     else:
         myFile = open(fileName, "r+")
         strings = myFile.readlines()
         strings = [line.rstrip('\n') for line in open('strings.txt')]#stripping the newline character:
 
-        print ("Please enter the regex to compare the file")
+        print ("Please enter the regex:")
         regex = input()
         for i in strings:
             print (match(regex, i), regex, i)
-        # Close opened files
+        # Close the file
         myFile.close()
 
 elif(len(sys.argv) == 3):
